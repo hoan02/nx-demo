@@ -1,0 +1,28 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@nx-demo/libs": ["libs/src/index.ts"],
+      "categories/CategoryService": [
+        "apps/categories/src/app/services/category.service.ts"
+      ],
+      "categories/Routes": ["apps/categories/src/app/app.routes.ts"],
+      "products/Routes": ["apps/products/src/app/app.routes.ts"],
+      "users/Routes": ["apps/users/src/app/app.routes.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
