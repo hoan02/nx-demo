@@ -17,7 +17,7 @@
       <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched"
         class="text-red-500 text-sm mt-1">
         <span *ngIf="userForm.get('username')?.hasError('required')">Username is required.</span>
-        <span *ngIf="userForm.get('username')?.hasError('minlength')">Username must be at least 3 characters
+        <span *ngIf="userForm.get('username')?.hasError('minlength')">Username must be at least 6 characters
           long.</span>
         <span *ngIf="userForm.get('username')?.hasError('usernameExists')">Username already exists.</span>
       </div>
