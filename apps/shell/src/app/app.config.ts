@@ -6,12 +6,14 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(withInterceptorsFromDi()),
+    provideAnimationsAsync(),
     provideToastr({
       timeOut: 3000,
       positionClass: 'toast-top-right',
