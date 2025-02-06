@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
@@ -8,8 +8,11 @@ import { MatCardModule } from '@angular/material/card';
   imports: [MatCardModule],
 })
 export class DialogConfirmComponent {
-  constructor(private dialogRef: MatDialogRef<DialogConfirmComponent>) {}
-  data = inject(MAT_DIALOG_DATA);
+  constructor(
+    @Inject(MAT_DIALOG_DATA)
+    public data: { message: string; lableButton: string },
+    private dialogRef: MatDialogRef<DialogConfirmComponent>
+  ) {}
 
   onConfirm(): void {
     this.dialogRef.close('confirm');

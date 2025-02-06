@@ -4,9 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
+// import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -16,14 +15,7 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-list-user',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatSortModule,
-    MatSelectModule,
-    FormsModule,
-    MatTableModule,
-    MatPaginatorModule,
-  ],
+  imports: [CommonModule, FormsModule, MatTableModule, MatPaginatorModule],
   templateUrl: './list-user.component.html',
 })
 export class ListUserComponent implements OnInit, AfterViewInit {
@@ -40,7 +32,6 @@ export class ListUserComponent implements OnInit, AfterViewInit {
   selectedRole = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private router: Router,
@@ -56,7 +47,6 @@ export class ListUserComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.userList.paginator = this.paginator;
-    this.userList.sort = this.sort;
   }
 
   getPosition(index: number): number {
@@ -86,14 +76,6 @@ export class ListUserComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openDialog() {
-    this.dialog.open(DialogConfirmComponent, {
-      data: {
-        animal: 'panda',
-      },
-    });
-  }
-
   onDeleteUser(id?: string): void {
     if (id) {
       const dialogRef = this.dialog.open(DialogConfirmComponent, {
@@ -105,7 +87,6 @@ export class ListUserComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result === 'confirm') {
-          // Nếu người dùng xác nhận xóa
           this.userService.deleteUser(id).subscribe({
             next: () => {
               this.toastr.success('User deleted successfully!');
