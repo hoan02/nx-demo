@@ -17,8 +17,8 @@
     <table mat-table [dataSource]="userList" class="min-w-full bg-white border border-gray-200">
       <ng-container matColumnDef="position">
         <th mat-header-cell *matHeaderCellDef> # </th>
-        <td mat-cell *matCellDef="let element; let i = index">
-          {{ getPosition(i) }}
+        <td mat-cell *matCellDef="let element">
+          {{ element.position }}
         </td>
       </ng-container>
 

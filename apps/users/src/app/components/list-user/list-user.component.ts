@@ -56,7 +56,10 @@ export class ListUserComponent implements OnInit, AfterViewInit {
   loadUsers(): void {
     this.userService.getUsers().subscribe({
       next: (data) => {
-        this.userList.data = data;
+        this.userList.data = data.map((user, index) => ({
+          ...user,
+          position: index + 1,
+        }));
       },
       error: (err) => console.error('Error loading users', err),
     });
