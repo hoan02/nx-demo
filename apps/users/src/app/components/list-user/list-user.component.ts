@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-// import { MatSelectModule } from '@angular/material/select';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -15,14 +15,20 @@ import { UserService } from '../../services/user.service';
 @Component({
   selector: 'app-list-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatTableModule, MatPaginatorModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+  ],
   templateUrl: './list-user.component.html',
 })
 export class ListUserComponent implements OnInit, AfterViewInit {
   userList = new MatTableDataSource<IUser>([]);
   displayedColumns: string[] = [
     'position',
-    'name',
+    'username',
     'email',
     'fullName',
     'role',
@@ -32,6 +38,7 @@ export class ListUserComponent implements OnInit, AfterViewInit {
   selectedRole = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private router: Router,
@@ -47,6 +54,7 @@ export class ListUserComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.userList.paginator = this.paginator;
+    this.userList.sort = this.sort;
   }
 
   getPosition(index: number): number {
