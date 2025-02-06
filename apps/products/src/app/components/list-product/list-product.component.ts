@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-import { IProduct } from '@nx-demo/libs';
+import { IProduct } from '@libs';
 import { ProductService } from '../../services/product.service';
 
 @Component({

@@ -4,9 +4,9 @@ import { of } from 'rxjs';
 import { UserService } from '../services/user.service';
 
 export class UserValidators {
-  static usernameExists(userService: UserService) {
+  static usernameExists(userService: UserService, originalUsername: string) {
     return (control: AbstractControl) => {
-      if (!control.value) {
+      if (!control.value || control.value === originalUsername) {
         return of(null);
       }
 
@@ -19,10 +19,10 @@ export class UserValidators {
     };
   }
 
-  static emailExists(userService: UserService) {
+  static emailExists(userService: UserService, originalEmail: string) {
     return (control: AbstractControl) => {
-      if (!control.value) {
-        return of(null);
+      if (!control.value || control.value === originalEmail) {
+        return of(null); // Bỏ qua kiểm tra nếu không thay đổi
       }
 
       return of(control.value).pipe(

@@ -9,9 +9,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { IUser, IUserRole } from '@libs';
 import { UserService } from '../../services/user.service';
 import { UserValidators } from '../../validators/user.validator';
-import { IUser, IUserRole } from '@nx-demo/libs';
 
 @Component({
   selector: 'app-user-form',
@@ -22,6 +22,8 @@ export class UserFormComponent implements OnInit {
   userForm!: FormGroup;
   userId = '';
   userRoles = Object.values(IUserRole);
+  originalUsername = '';
+  originalEmail = '';
   isEditMode = false;
   isSubmitting = false;
 
@@ -53,18 +55,10 @@ export class UserFormComponent implements OnInit {
 
   private initForm(): void {
     this.userForm = this.fb.group({
-      username: [
-        '',
-        [Validators.required, Validators.minLength(3)],
-        [UserValidators.usernameExists(this.userService)],
-      ],
+      username: ['', [Validators.required, Validators.minLength(6)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       fullName: [''],
-      email: [
-        '',
-        [Validators.required, Validators.email],
-        [UserValidators.emailExists(this.userService)],
-      ],
+      email: ['', [Validators.required, Validators.email]],
       role: [IUserRole.USER, [Validators.required]],
       profilePicture: [''],
       status: ['active'],
@@ -76,6 +70,25 @@ export class UserFormComponent implements OnInit {
     this.userService.getUserById(id).subscribe({
       next: (user) => {
         this.userForm.patchValue(user);
+        this.originalUsername = user.username;
+        this.originalEmail = user.email;
+
+        this.userForm
+          .get('username')
+          ?.setAsyncValidators(
+            UserValidators.usernameExists(
+              this.userService,
+              this.originalUsername
+            )
+          );
+
+        this.userForm
+          .get('email')
+          ?.setAsyncValidators(
+            UserValidators.emailExists(this.userService, this.originalEmail)
+          );
+
+        this.userForm.updateValueAndValidity();
       },
       error: (err) => {
         console.error('Error loading user:', err);
