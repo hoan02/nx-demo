@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ICategory } from '@nx-demo/libs';
+import { ICategory } from '@libs';
 import { ToastrService } from 'ngx-toastr';
 import { CategoryService } from '../../services/category.service';
 

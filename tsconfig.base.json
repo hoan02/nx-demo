@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nx-demo/libs": ["libs/src/index.ts"],
+      "@libs": ["libs/src/index.ts"],
       "categories/CategoryService": [
         "apps/categories/src/app/services/category.service.ts"
       ],

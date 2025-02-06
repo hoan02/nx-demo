@@ -1,15 +1,16 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatSort } from '@angular/material/sort';
+import { ToastrService } from 'ngx-toastr';
 
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { IUser, IUserRole } from '@nx-demo/libs';
+import { MatDialog } from '@angular/material/dialog';
+
+import { DialogConfirmComponent, IUser, IUserRole } from '@libs';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -45,7 +46,8 @@ export class ListUserComponent implements OnInit, AfterViewInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
-    private userService: UserService
+    private userService: UserService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -84,16 +86,36 @@ export class ListUserComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openDialog() {
+    this.dialog.open(DialogConfirmComponent, {
+      data: {
+        animal: 'panda',
+      },
+    });
+  }
+
   onDeleteUser(id?: string): void {
-    if (id && confirm('Are you sure you want to delete this user?')) {
-      this.userService.deleteUser(id).subscribe({
-        next: () => {
-          this.toastr.success('User deleted successfully!');
-          this.loadUsers();
+    if (id) {
+      const dialogRef = this.dialog.open(DialogConfirmComponent, {
+        data: {
+          message: 'Are you sure you want to delete this user?',
+          lableButton: 'Delete',
         },
-        error: (err) => {
-          this.toastr.error('Error deleting user!', err.message);
-        },
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result === 'confirm') {
+          // Nếu người dùng xác nhận xóa
+          this.userService.deleteUser(id).subscribe({
+            next: () => {
+              this.toastr.success('User deleted successfully!');
+              this.loadUsers();
+            },
+            error: (err) => {
+              this.toastr.error('Error deleting user!', err.message);
+            },
+          });
+        }
       });
     }
   }
