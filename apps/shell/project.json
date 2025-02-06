@@ -23,7 +23,8 @@
         ],
         "styles": [
           "apps/shell/src/styles.css",
-          "node_modules/ngx-toastr/toastr.css"
+          "node_modules/ngx-toastr/toastr.css",
+          "@angular/material/prebuilt-themes/azure-blue.css"
         ],
         "scripts": [],
         "customWebpackConfig": {
