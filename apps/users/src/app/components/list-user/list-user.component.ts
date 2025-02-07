@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -21,13 +20,12 @@ import { catchError, map, of, startWith, switchMap } from 'rxjs';
     CommonModule,
     FormsModule,
     MatTableModule,
-    MatSortModule,
     MatPaginatorModule,
     MatProgressBarModule,
   ],
   templateUrl: './list-user.component.html',
 })
-export class ListUserComponent implements OnInit, AfterViewInit {
+export class ListUserComponent implements AfterViewInit {
   displayedColumns: string[] = [
     'position',
     'username',
@@ -48,7 +46,6 @@ export class ListUserComponent implements OnInit, AfterViewInit {
   pageSizeOptions = [5, 10, 25, 50];
 
   @ViewChild('paginator') paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private router: Router,
@@ -58,17 +55,13 @@ export class ListUserComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog
   ) {}
 
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit(): void {
-    // this.loadUsers();
-  }
-
   getTableData$(pageNumber: number, pageSize: number) {
     return this.userService.getUsers(pageNumber, pageSize);
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
+
     this.paginator.page
       .pipe(
         startWith({}),
@@ -90,8 +83,6 @@ export class ListUserComponent implements OnInit, AfterViewInit {
         this.usersData = data;
         this.dataSource = new MatTableDataSource(this.usersData);
       });
-
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(): void {
