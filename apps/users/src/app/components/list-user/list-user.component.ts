@@ -66,7 +66,9 @@ export class ListUserComponent implements AfterViewInit {
       .pipe(
         startWith({}),
         switchMap(() => {
-          this.isLoading = true;
+          setTimeout(() => {
+            this.isLoading = true;
+          });
           return this.getTableData$(
             this.paginator.pageIndex + 1,
             this.paginator.pageSize
@@ -75,7 +77,9 @@ export class ListUserComponent implements AfterViewInit {
         map((data) => {
           if (data == null) return [];
           this.totalData = data.total;
-          this.isLoading = false;
+          setTimeout(() => {
+            this.isLoading = false;
+          });
           return data.data;
         })
       )
