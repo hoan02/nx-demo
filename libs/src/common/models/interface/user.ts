@@ -17,3 +17,12 @@ export interface IUser {
   resetPasswordExpires?: Date;
   phoneNumber?: string;
 }
+
+
+export interface IUserTable {
+  data: IUser[];
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+}
