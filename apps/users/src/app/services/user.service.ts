@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IUser } from '@libs';
 import { environment } from '../environments/environment.development';
+import { IUserTable } from '@libs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,13 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getUsers(): Observable<IUser[]> {
-    return this.http.get<IUser[]>(this.apiUrl);
+  getUsers(pageNumber: number, pageSize: number): Observable<IUserTable> {
+    return this.http.get<IUserTable>(`${this.apiUrl}`, {
+      params: {
+        page: pageNumber.toString(),
+        limit: pageSize.toString(),
+      },
+    });
   }
 
   getUserById(id: string): Observable<IUser> {

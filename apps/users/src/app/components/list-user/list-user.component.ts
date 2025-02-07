@@ -5,12 +5,14 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { DialogConfirmComponent, IUser, IUserRole } from '@libs';
+import { DialogConfirmComponent, IUser, IUserRole, IUserTable } from '@libs';
 import { UserService } from '../../services/user.service';
+import { catchError, map, of, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-list-user',
@@ -21,11 +23,11 @@ import { UserService } from '../../services/user.service';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
+    MatProgressBarModule,
   ],
   templateUrl: './list-user.component.html',
 })
 export class ListUserComponent implements OnInit, AfterViewInit {
-  userList = new MatTableDataSource<IUser>([]);
   displayedColumns: string[] = [
     'position',
     'username',
@@ -35,9 +37,17 @@ export class ListUserComponent implements OnInit, AfterViewInit {
     'actions',
   ];
   roles: string[] = Object.values(IUserRole);
-  selectedRole = '';
+  usersTable!: IUserTable;
+  totalData!: number;
+  usersData!: IUser[];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  dataSource = new MatTableDataSource<IUser>([]);
+  selectedRole = '';
+  isLoading = false;
+
+  pageSizeOptions = [5, 10, 25, 50];
+
+  @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
@@ -48,33 +58,44 @@ export class ListUserComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog
   ) {}
 
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
   ngOnInit(): void {
-    this.loadUsers();
+    // this.loadUsers();
+  }
+
+  getTableData$(pageNumber: number, pageSize: number) {
+    return this.userService.getUsers(pageNumber, pageSize);
   }
 
   ngAfterViewInit(): void {
-    this.userList.paginator = this.paginator;
-    this.userList.sort = this.sort;
-  }
+    this.dataSource.paginator = this.paginator;
+    this.paginator.page
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoading = true;
+          return this.getTableData$(
+            this.paginator.pageIndex + 1,
+            this.paginator.pageSize
+          ).pipe(catchError(() => of(null)));
+        }),
+        map((data) => {
+          if (data == null) return [];
+          this.totalData = data.total;
+          this.isLoading = false;
+          return data.data;
+        })
+      )
+      .subscribe((data) => {
+        this.usersData = data;
+        this.dataSource = new MatTableDataSource(this.usersData);
+      });
 
-  getPosition(index: number): number {
-    return index + 1 + this.paginator.pageIndex * this.paginator.pageSize;
-  }
-
-  loadUsers(): void {
-    this.userService.getUsers().subscribe({
-      next: (data) => {
-        this.userList.data = data.map((user, index) => ({
-          ...user,
-          position: index + 1,
-        }));
-      },
-      error: (err) => console.error('Error loading users', err),
-    });
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(): void {
-    this.userList.filter = this.selectedRole.trim().toLowerCase();
+    this.dataSource.filter = this.selectedRole.trim().toLowerCase();
   }
 
   onAddUser(): void {
@@ -101,7 +122,7 @@ export class ListUserComponent implements OnInit, AfterViewInit {
           this.userService.deleteUser(id).subscribe({
             next: () => {
               this.toastr.success('User deleted successfully!');
-              this.loadUsers();
+              // this.loadUsers();
             },
             error: (err) => {
               this.toastr.error('Error deleting user!', err.message);
