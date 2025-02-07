@@ -109,27 +109,41 @@ export class ListUserComponent implements OnInit, AfterViewInit {
   }
 
   onDeleteUser(id?: string): void {
-    if (id) {
-      const dialogRef = this.dialog.open(DialogConfirmComponent, {
-        data: {
-          message: 'Are you sure you want to delete this user?',
-          lableButton: 'Delete',
-        },
-      });
+    if (!id) return;
 
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result === 'confirm') {
-          this.userService.deleteUser(id).subscribe({
-            next: () => {
-              this.toastr.success('User deleted successfully!');
-              // this.loadUsers();
-            },
-            error: (err) => {
-              this.toastr.error('Error deleting user!', err.message);
-            },
+    const dialogRef = this.dialog.open(DialogConfirmComponent, {
+      data: {
+        message: 'Are you sure you want to delete this user?',
+        labelButton: 'Delete',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirm') {
+        this.deleteUser(id);
+      }
+    });
+  }
+
+  private deleteUser(id: string): void {
+    this.userService.deleteUser(id).subscribe({
+      next: () => {
+        this.toastr.success('User deleted successfully!');
+        this.getTableData$(
+          this.paginator.pageIndex + 1,
+          this.paginator.pageSize
+        )
+          .pipe(catchError(() => of(null)))
+          .subscribe((data) => {
+            if (data) {
+              this.totalData = data.total;
+              this.dataSource.data = data.data;
+            }
           });
-        }
-      });
-    }
+      },
+      error: (err) => {
+        this.toastr.error('Error deleting user!', err.message);
+      },
+    });
   }
 }

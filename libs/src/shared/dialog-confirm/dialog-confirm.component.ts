@@ -10,7 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 export class DialogConfirmComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
-    public data: { message: string; lableButton: string },
+    public data: { message: string; labelButton: string },
     private dialogRef: MatDialogRef<DialogConfirmComponent>
   ) {}
 
