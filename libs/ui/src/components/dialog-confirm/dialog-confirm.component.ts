@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'dialog-confirm',
+  selector: 'lib-dialog-confirm',
   templateUrl: './dialog-confirm.component.html',
   imports: [MatCardModule],
 })

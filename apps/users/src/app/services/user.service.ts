@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IUser } from '@libs';
 import { environment } from '../environments/environment.development';
-import { IUserTable } from '@libs';
+import { IUser, IUserTable } from '@nx-demo/common';
 
 @Injectable({
   providedIn: 'root',

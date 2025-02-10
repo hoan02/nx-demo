@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { IUser, IUserRole } from '@libs';
+import { IUser, IUserRole } from '@nx-demo/common';
 import { UserService } from '../../services/user.service';
 import { UserValidators } from '../../validators/user.validator';
 
