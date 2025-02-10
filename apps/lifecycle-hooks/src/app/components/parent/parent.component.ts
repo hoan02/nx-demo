@@ -8,7 +8,7 @@ import { ChildComponent } from '../child/child.component';
   templateUrl: './parent.component.html',
 })
 export class ParentComponent {
-  isChildVisible = true;
+  isChildVisible = false;
   parentValue = 'Initial Value';
   message = '';
 

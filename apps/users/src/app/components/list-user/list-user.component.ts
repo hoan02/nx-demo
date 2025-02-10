@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { DialogConfirmComponent, IUser, IUserRole, IUserTable } from '@libs';
 import { UserService } from '../../services/user.service';
-import { catchError, map, of, startWith, switchMap } from 'rxjs';
+import { catchError, map, of, startWith, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-list-user',
@@ -55,31 +65,22 @@ export class ListUserComponent implements AfterViewInit {
     private dialog: MatDialog
   ) {}
 
-  getTableData$(pageNumber: number, pageSize: number) {
-    return this.userService.getUsers(pageNumber, pageSize);
-  }
-
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
 
     this.paginator.page
       .pipe(
         startWith({}),
-        switchMap(() => {
-          setTimeout(() => {
-            this.isLoading = true;
-          });
-          return this.getTableData$(
-            this.paginator.pageIndex + 1,
-            this.paginator.pageSize
-          ).pipe(catchError(() => of(null)));
-        }),
+        tap(() => setTimeout(() => (this.isLoading = true))),
+        switchMap(() =>
+          this.userService
+            .getUsers(this.paginator.pageIndex + 1, this.paginator.pageSize)
+            .pipe(catchError(() => of(null)))
+        ),
+        tap(() => setTimeout(() => (this.isLoading = false))),
         map((data) => {
           if (data == null) return [];
           this.totalData = data.total;
-          setTimeout(() => {
-            this.isLoading = false;
-          });
           return data.data;
         })
       )
@@ -121,24 +122,26 @@ export class ListUserComponent implements AfterViewInit {
   }
 
   private deleteUser(id: string): void {
-    this.userService.deleteUser(id).subscribe({
-      next: () => {
-        this.toastr.success('User deleted successfully!');
-        this.getTableData$(
-          this.paginator.pageIndex + 1,
-          this.paginator.pageSize
-        )
-          .pipe(catchError(() => of(null)))
-          .subscribe((data) => {
-            if (data) {
-              this.totalData = data.total;
-              this.dataSource.data = data.data;
-            }
-          });
-      },
-      error: (err) => {
-        this.toastr.error('Error deleting user!', err.message);
-      },
-    });
+    this.userService
+      .deleteUser(id)
+      .pipe(
+        tap(() => this.toastr.success('User deleted successfully!')),
+        switchMap(() => {
+          return this.userService.getUsers(
+            this.paginator.pageIndex + 1,
+            this.paginator.pageSize
+          );
+        }),
+        catchError((err) => {
+          this.toastr.error('Error deleting user!', err.message);
+          return of(null);
+        })
+      )
+      .subscribe((data) => {
+        if (data) {
+          this.totalData = data.total;
+          this.dataSource.data = data.data;
+        }
+      });
   }
 }
