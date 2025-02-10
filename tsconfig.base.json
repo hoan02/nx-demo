@@ -16,14 +16,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@libs": ["libs/src/index.ts"],
+      "@nx-demo/common": ["libs/common/index.ts"],
+      "@nx-demo/ui": ["libs/ui/src/index.ts"],
+      "@nx-demo/auth/data-access": ["libs/ui/auth/data-access/index.ts"],
+      "@nx-demo/auth/feature-auth": ["libs/ui/auth/feature-auth/index.ts"],
       "categories/CategoryService": [
         "apps/categories/src/app/services/category.service.ts"
       ],
       "categories/Routes": ["apps/categories/src/app/app.routes.ts"],
-      "lifecycleHooks/Routes": [
-        "apps/lifecycle-hooks/src/app/app.routes.ts"
-      ],
+      "lifecycleHooks/Routes": ["apps/lifecycle-hooks/src/app/app.routes.ts"],
       "products/Routes": ["apps/products/src/app/app.routes.ts"],
       "users/Routes": ["apps/users/src/app/app.routes.ts"]
     }

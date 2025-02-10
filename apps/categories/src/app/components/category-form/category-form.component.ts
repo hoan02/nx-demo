@@ -10,7 +10,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { CategoryService } from '../../services/category.service';
-import { ICategory } from '@libs';
+import { ICategory } from '@nx-demo/common';
 
 @Component({
   selector: 'app-category-form',

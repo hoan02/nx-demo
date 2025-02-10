@@ -1,14 +1,4 @@
-import {
-  AfterContentChecked,
-  AfterContentInit,
-  AfterViewChecked,
-  AfterViewInit,
-  Component,
-  DoCheck,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -19,9 +9,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { DialogConfirmComponent, IUser, IUserRole, IUserTable } from '@libs';
 import { UserService } from '../../services/user.service';
 import { catchError, map, of, startWith, switchMap, tap } from 'rxjs';
+import { IUser, IUserRole, IUserTable } from '@nx-demo/common';
+import { DialogConfirmComponent } from '@nx-demo/ui';
 
 @Component({
   selector: 'app-list-user',
