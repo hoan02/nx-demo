@@ -21,6 +21,9 @@
         "apps/categories/src/app/services/category.service.ts"
       ],
       "categories/Routes": ["apps/categories/src/app/app.routes.ts"],
+      "lifecycleHooks/Routes": [
+        "apps/lifecycle-hooks/src/app/app.routes.ts"
+      ],
       "products/Routes": ["apps/products/src/app/app.routes.ts"],
       "users/Routes": ["apps/users/src/app/app.routes.ts"]
     }
