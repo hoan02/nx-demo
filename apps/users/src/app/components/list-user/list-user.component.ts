@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { UserService } from '../../services/user.service';
 import { catchError, map, of, startWith, switchMap, tap } from 'rxjs';
-import { IUser, IUserRole, IUserTable } from '@nx-demo/common';
+import { IUser, IUserRole, IUserTable } from '@nx-demo/core/api-types';
 import { DialogConfirmComponent } from '@nx-demo/ui';
 
 @Component({

@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs';
 import { ProductService } from '../../services/product.service';
-import { ICategory, IProduct } from '@nx-demo/common';
+import { ICategory, IProduct } from '@nx-demo/core/api-types';
 import { CategoryService } from 'categories/CategoryService';
 
 @Component({

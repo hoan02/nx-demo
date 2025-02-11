@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import { IProduct } from '@nx-demo/common';
+import { IProduct } from '@nx-demo/core/api-types';
 
 @Injectable({
   providedIn: 'root',

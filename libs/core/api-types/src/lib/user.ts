@@ -18,6 +18,9 @@ export interface IUser {
   phoneNumber?: string;
 }
 
+export interface UserResponse {
+  user: IUser & { token: string };
+}
 
 export interface IUserTable {
   data: IUser[];
