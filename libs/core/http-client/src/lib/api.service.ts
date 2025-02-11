@@ -38,10 +38,15 @@ export class ApiService {
   }
 
   get headers(): HttpHeaders {
-    const headersConfig = {
+    const headersConfig: { [key: string]: string } = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     };
+
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      headersConfig['Authorization'] = `Bearer ${token}`;
+    }
 
     return new HttpHeaders(headersConfig);
   }

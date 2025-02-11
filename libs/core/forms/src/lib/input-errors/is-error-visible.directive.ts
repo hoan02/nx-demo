@@ -12,6 +12,7 @@ import { AbstractControl } from '@angular/forms';
 
 @Directive({
   selector: '[libIsErrorVisible]',
+  standalone: true
 })
 export class IsErrorVisibleDirective implements AfterViewInit {
   private readonly templateRef = inject(TemplateRef<unknown>);

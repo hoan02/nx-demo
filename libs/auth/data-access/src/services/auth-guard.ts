@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
-import { AuthStore } from '../auth.store';
+import { AuthStore } from '../store/auth.store';
 
 export const authGuard = (): boolean | UrlTree => {
   const router = inject(Router);

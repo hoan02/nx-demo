@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../environments/environment.development';
 import { IUser, IUserTable } from '@nx-demo/core/api-types';
+import { ApiService } from '@nx-demo/core/http-client';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -10,42 +11,41 @@ import { IUser, IUserTable } from '@nx-demo/core/api-types';
 export class UserService {
   private apiUrl = environment.API_URL + 'users';
 
-  constructor(private http: HttpClient) {}
+  private readonly apiService = inject(ApiService);
 
   getUsers(pageNumber: number, pageSize: number): Observable<IUserTable> {
-    return this.http.get<IUserTable>(`${this.apiUrl}`, {
-      params: {
-        page: pageNumber.toString(),
-        limit: pageSize.toString(),
-      },
-    });
+    const params = new HttpParams()
+      .set('page', pageNumber.toString())
+      .set('limit', pageSize.toString());
+    return this.apiService.get<IUserTable>(`${this.apiUrl}`, params);
   }
 
   getUserById(id: string): Observable<IUser> {
-    return this.http.get<IUser>(`${this.apiUrl}/${id}`);
+    return this.apiService.get<IUser>(`${this.apiUrl}/${id}`);
   }
 
   createUser(user: IUser): Observable<IUser> {
-    return this.http.post<IUser>(this.apiUrl, user);
+    return this.apiService.post<IUser, IUser>(this.apiUrl, user);
   }
 
   updateUser(id: string, user: IUser): Observable<IUser> {
-    return this.http.put<IUser>(`${this.apiUrl}/${id}`, user);
+    return this.apiService.put<IUser, IUser>(`${this.apiUrl}/${id}`, user);
   }
 
   deleteUser(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.apiService.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   checkUsername(username: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/check-username`, {
-      params: { username },
-    });
+    const params = new HttpParams().set('username', username);
+    return this.apiService.get<boolean>(
+      `${this.apiUrl}/check-username`,
+      params
+    );
   }
 
   checkEmail(email: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/check-email`, {
-      params: { email },
-    });
+    const params = new HttpParams().set('email', email);
+    return this.apiService.get<boolean>(`${this.apiUrl}/check-email`, params);
   }
 }

@@ -19,7 +19,7 @@ export interface IUser {
 }
 
 export interface UserResponse {
-  user: IUser & { token: string };
+  user: IUser & { accessToken: string };
 }
 
 export interface IUserTable {

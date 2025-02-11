@@ -6,9 +6,13 @@ import { tapResponse } from '@ngrx/operators';
 import { Router } from '@angular/router';
 import { LoginUser, NewUser, IUser } from '@nx-demo/core/api-types';
 import { setLoaded, withCallState } from '@nx-demo/core/data-access';
-import { FormErrorsStore } from '@nx-demo/core/forms';
-import { AuthState, authInitialState, initialUserValue } from '../models/auth.model';
+import {
+  AuthState,
+  authInitialState,
+  initialUserValue,
+} from '../models/auth.model';
 import { AuthService } from '../services/auth.service';
+import { FormErrorsStore } from '@nx-demo/core/form';
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
@@ -23,9 +27,24 @@ export const AuthStore = signalStore(
       getUser: rxMethod<void>(
         pipe(
           switchMap(() => authService.user()),
-          tap(({ user }) =>
-            patchState(store, { user, loggedIn: true, ...setLoaded('getUser') })
-          )
+          tapResponse({
+            next: ({ user }) => {
+              patchState(store, {
+                user,
+                loggedIn: true,
+                ...setLoaded('getUser'),
+              });
+            },
+            error: () => {
+              // Reset state và redirect về login nếu API lỗi
+              patchState(store, {
+                user: initialUserValue,
+                loggedIn: false,
+                ...setLoaded('getUser'),
+              });
+              router.navigateByUrl('/login');
+            },
+          })
         )
       ),
       login: rxMethod<LoginUser>(

@@ -5,9 +5,10 @@ import { ErrorMapperPipe } from './error-mapper-pipe';
 import { IsErrorVisibleDirective } from './is-error-visible.directive';
 
 @Component({
-  selector: 'lib-core-input-errors',
+  selector: 'lib-input-errors',
   templateUrl: './input-errors.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [KeyValuePipe, ErrorMapperPipe, IsErrorVisibleDirective],
 })
 export class InputErrorsComponent {

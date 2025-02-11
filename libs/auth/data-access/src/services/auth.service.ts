@@ -1,7 +1,7 @@
 import { ApiService } from '@nx-demo/core/http-client';
 import { IUser, UserResponse } from '@nx-demo/core/api-types';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import {
   LoginUser,
   LoginUserRequest,
@@ -22,10 +22,18 @@ export class AuthService {
   }
 
   login(credentials: LoginUser): Observable<UserResponse> {
-    return this.apiService.post<UserResponse, LoginUserRequest>(
-      '/users/login',
-      { user: credentials }
-    );
+    return this.apiService
+      .post<UserResponse, LoginUserRequest>('/users/login', {
+        user: credentials,
+      })
+      .pipe(
+        tap((response) => {
+          const accessToken = response.user.accessToken;
+          if (accessToken) {
+            localStorage.setItem('accessToken', accessToken);
+          }
+        })
+      );
   }
 
   logout(): Observable<{ message: string }> {

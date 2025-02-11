@@ -1,6 +1,6 @@
 import { IUser, IUserRole } from '@nx-demo/core/api-types';
 
-type UserState = IUser & { token: string };
+type UserState = IUser & { accessToken: string };
 
 export type AuthState = {
   loggedIn: boolean;
@@ -12,8 +12,8 @@ export const initialUserValue: UserState = {
   email: '',
   username: '',
   password: '',
-  token: '',
   role: IUserRole.USER,
+  accessToken: '',
 };
 
 export const authInitialState: AuthState = {

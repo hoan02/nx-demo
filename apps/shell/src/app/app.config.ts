@@ -7,6 +7,8 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { API_URL } from '@nx-demo/core/http-client';
+import { environment } from '../environments/environment.development';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +23,6 @@ export const appConfig: ApplicationConfig = {
       closeButton: true,
       progressBar: true,
     }),
+    { provide: API_URL, useValue: environment.api_url },
   ],
 };
