@@ -1,7 +1,7 @@
 {
-  "name": "feature-auth",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/auth/feature-auth/src",
+  "name": "api-types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/core/api-types/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],
