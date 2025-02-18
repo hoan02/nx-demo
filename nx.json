@@ -15,7 +15,7 @@
     ],
     "sharedGlobals": []
   },
-  "nxCloudId": "67a073ba0608fc5277875ab5",
+  "nxCloudId": "67b3ff4f7d2aac25ab7944cb",
   "targetDefaults": {
     "@angular-devkit/build-angular:browser": {
       "cache": true,
@@ -34,13 +34,7 @@
     "@nx/angular:webpack-browser": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": [
-        "production",
-        "^production",
-        {
-          "env": "NX_MF_DEV_REMOTES"
-        }
-      ]
+      "inputs": ["production", "^production", { "env": "NX_MF_DEV_REMOTES" }]
     },
     "@angular-devkit/build-angular:application": {
       "cache": true,
@@ -65,20 +59,10 @@
       "style": "css",
       "unitTestRunner": "none"
     },
-    "@nx/angular:library": {
-      "linter": "eslint",
-      "unitTestRunner": "none"
-    },
-    "@nx/angular:component": {
-      "style": "css"
-    }
+    "@nx/angular:library": { "linter": "eslint", "unitTestRunner": "none" },
+    "@nx/angular:component": { "style": "css" }
   },
   "plugins": [
-    {
-      "plugin": "@nx/jest/plugin",
-      "options": {
-        "targetName": "test"
-      }
-    }
+    { "plugin": "@nx/jest/plugin", "options": { "targetName": "test" } }
   ]
 }
