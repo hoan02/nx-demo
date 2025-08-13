@@ -1,0 +1,56 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:latest
+    args:
+      - --dockerfile=/workspace/apps/shell/Dockerfile
+      - --context=dir:///workspace/
+      - --destination=registry.container-registry.svc.cluster.local:5000/shell-app:latest
+      - --insecure
+      - --skip-tls-verify
+    volumeMounts:
+      - name: workspace
+        mountPath: /workspace
+  volumes:
+    - name: workspace
+      emptyDir: {}
+"""
+    }
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+    stage('Build and Push Shell App') {
+      steps {
+        container('kaniko') {
+          sh 'ls -la /workspace'
+          echo "Building and pushing shell app image with Kaniko"
+        }
+      }
+    }
+    stage('Deploy to Kubernetes') {
+      steps {
+        script {
+          sh '''
+            kubectl apply -f k8s/shell-deployment.yaml
+            kubectl rollout status deployment/shell-app
+          '''
+        }
+      }
+    }
+  }
+  post {
+    always {
+      echo "Shell app deployment completed"
+    }
+  }
+} 
